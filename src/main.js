@@ -7,6 +7,7 @@ const selectedLanguages = [];
 const selectedGenres = [];
 
 const favorites = JSON.parse(localStorage.getItem("favorites")) || [];
+let favBarItems = []
 
 
 
@@ -40,9 +41,11 @@ render(BOOKS)
 
 function addFav(id) {
     favorites.push(id);
+    favBarItems.push(id);
     localStorage.setItem("favorites", JSON.stringify(favorites));
     calcFilters()
-    favRender()
+    favRender1(id)
+    // favRender()
 }
 
 function removeFav(id) {
@@ -50,7 +53,7 @@ function removeFav(id) {
     favorites.splice(foundIndex, 1)
     localStorage.setItem("favorites", JSON.stringify(favorites));
     calcFilters()
-    favRender()
+    // favRender()
 }
 
 function renderFilters() {
@@ -204,14 +207,40 @@ function calcFilters() {
 
     render(result)
 }
-function favRender(){
+// function favRender(){
     
-    // debugger
-    let result =favorites.map(item => {
-        let foundIndex=BOOKS.findIndex(book => book.id === item)
-        console.log(foundIndex)
-        if(favorites.includes(item)){
-           let temp =`<div id="${item}" class="rounded-md overflow-hidden border shadow-lg relative">
+//     // debugger
+//     let result =favBarItems.map(item => {
+//         let foundIndex=BOOKS.findIndex(book => book.id === item)
+//         console.log(foundIndex)
+//         if(favorites.includes(item)){
+//            let temp =`<div id="${item}" class="rounded-md overflow-hidden border shadow-lg relative">
+//         <img src="./image/${BOOKS[foundIndex].imgSrc}" width="300" alt="" class="w-full h-[300px] object-cover">
+//         <div class="p-4">
+//             <h2>${BOOKS[foundIndex].title}</h2>
+//             <p>اثر: ${BOOKS[foundIndex].author}</p>
+            
+//         </div>
+//         <span class="genre">${BOOKS[foundIndex].genre}</span>
+//         <span class="p-date">${BOOKS[foundIndex].published_date}</span>
+//     </div>`
+    
+//     return temp
+//         }
+        
+        
+        
+        
+//     }).join("")
+    
+//     favBarItems=[]
+//     console.log(result)
+//     return favRoot.innerHTML+=result
+// }
+// favRender()
+function favRender1(input ){
+    let foundIndex = BOOKS.findIndex(book => book.id === input)
+    let temp=`<div id="${input}" class="rounded-md overflow-hidden border shadow-lg relative">
         <img src="./image/${BOOKS[foundIndex].imgSrc}" width="300" alt="" class="w-full h-[300px] object-cover">
         <div class="p-4">
             <h2>${BOOKS[foundIndex].title}</h2>
@@ -221,15 +250,9 @@ function favRender(){
         <span class="genre">${BOOKS[foundIndex].genre}</span>
         <span class="p-date">${BOOKS[foundIndex].published_date}</span>
     </div>`
-    
-    return temp
-        }
-        
-        
-        
-        
-    }).join("")
-    console.log(result)
-    return favRoot.innerHTML+=result
+
+    return favRoot.innerHTML+=temp
+
+
 }
-favRender()
+favRender1()
