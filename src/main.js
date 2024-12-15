@@ -5,6 +5,7 @@ const favRoot = document.getElementById("favBar")
 const selectedAuthors = [];
 const selectedLanguages = [];
 const selectedGenres = [];
+let count =0
 
 const favorites = JSON.parse(localStorage.getItem("favorites")) || [];
 favRoot.innerHTML = JSON.parse(localStorage.getItem("saveFav")) || "";
@@ -45,11 +46,11 @@ favCounter()
 function addFav(id) {
     favorites.push(id);
     favBarItems.push(id);
-    // if(favRoot.innerHTML!==""){
-    //     let element= document.querySelector("h5")
-    //     element.remove()
+    if(favorites.length!==0){
+        let element= document.querySelector("h5")
+        element.classList.add("opacity-0")
 
-    // }
+    }
     // console.log(element)
     localStorage.setItem("favorites", JSON.stringify(favorites));
     calcFilters()
@@ -65,14 +66,13 @@ function removeFav(id) {
     const foundIndex = favorites.findIndex(item => item == id);
     favorites.splice(foundIndex, 1)
     localStorage.setItem("favorites", JSON.stringify(favorites));
-    if(favRoot.innerHTML===""){
-        let element= document.createElement("h5")
-        element.textContent="سبد شما خالیست!"
-        favRoot.appendChild(element)
-    }
     calcFilters()
     favBarItemsDel(id)
     favCounter()
+    if(favorites.length===0){
+        let element= document.querySelector("h5")
+        element.classList.remove("opacity-0")
+    }
     // favRender()
 }
 
@@ -271,6 +271,7 @@ function favRender1(input ){
         <span class="genre">${BOOKS[foundIndex].genre}</span>
         <span class="p-date">${BOOKS[foundIndex].published_date}</span>
     </div>`
+
     
     let result = favRoot.innerHTML+=temp
     localStorage.setItem("saveFav",JSON.stringify(result))
@@ -287,12 +288,14 @@ function favBarItemsDel(input){
 }
 function favToggler(){
     document.getElementById("favBar").classList.toggle("scale-x-0")
-    if(favRoot.innerHTML===""){
+    document.getElementById("favImg").classList.toggle("rotate-[360deg]")
+    if(favorites.length===0&&count===0){
+        count++
         let element= document.createElement("h5")
         element.textContent="سبد شما خالیست!"
         favRoot.appendChild(element)
-    }
-    document.getElementById("favImg").classList.toggle("rotate-[360deg]")
+        console.log(element)
+    } 
     
         
 }
