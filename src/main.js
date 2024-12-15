@@ -7,6 +7,8 @@ const selectedLanguages = [];
 const selectedGenres = [];
 
 const favorites = JSON.parse(localStorage.getItem("favorites")) || [];
+favRoot.innerHTML = JSON.parse(localStorage.getItem("saveFav")) || "";
+
 let favBarItems = []
 
 
@@ -38,13 +40,24 @@ function render(list) {
     root.innerHTML = template
 }
 render(BOOKS)
+favCounter()
 
 function addFav(id) {
     favorites.push(id);
     favBarItems.push(id);
+    // if(favRoot.innerHTML!==""){
+    //     let element= document.querySelector("h5")
+    //     element.remove()
+
+    // }
+    // console.log(element)
     localStorage.setItem("favorites", JSON.stringify(favorites));
     calcFilters()
     favRender1(id)
+    favCounter()
+
+    
+    
     // favRender()
 }
 
@@ -52,7 +65,14 @@ function removeFav(id) {
     const foundIndex = favorites.findIndex(item => item == id);
     favorites.splice(foundIndex, 1)
     localStorage.setItem("favorites", JSON.stringify(favorites));
+    if(favRoot.innerHTML===""){
+        let element= document.createElement("h5")
+        element.textContent="سبد شما خالیست!"
+        favRoot.appendChild(element)
+    }
     calcFilters()
+    favBarItemsDel(id)
+    favCounter()
     // favRender()
 }
 
@@ -245,14 +265,39 @@ function favRender1(input ){
         <div class="p-4">
             <h2>${BOOKS[foundIndex].title}</h2>
             <p>اثر: ${BOOKS[foundIndex].author}</p>
+            <p onclick="removeFav(${input})" class="p-4 rounded-3xl bg-red-400 w-max">حذف<p>
             
         </div>
         <span class="genre">${BOOKS[foundIndex].genre}</span>
         <span class="p-date">${BOOKS[foundIndex].published_date}</span>
     </div>`
+    
+    let result = favRoot.innerHTML+=temp
+    localStorage.setItem("saveFav",JSON.stringify(result))
 
-    return favRoot.innerHTML+=temp
+    return result
 
 
 }
 favRender1()
+function favBarItemsDel(input){
+    document.getElementById(`${input}`).remove()
+    localStorage.setItem("saveFav",JSON.stringify(favRoot.innerHTML))
+
+}
+function favToggler(){
+    document.getElementById("favBar").classList.toggle("scale-x-0")
+    if(favRoot.innerHTML===""){
+        let element= document.createElement("h5")
+        element.textContent="سبد شما خالیست!"
+        favRoot.appendChild(element)
+    }
+    document.getElementById("favImg").classList.toggle("rotate-[360deg]")
+    
+        
+}
+function favCounter(){
+    document.getElementById("favCounter").textContent=favorites.length
+}
+
+
