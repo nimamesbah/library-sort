@@ -265,7 +265,7 @@ function favRender1(input ){
         <div class="p-4">
             <h2>${BOOKS[foundIndex].title}</h2>
             <p>اثر: ${BOOKS[foundIndex].author}</p>
-            <p onclick="removeFav(${input})" class="p-4 rounded-3xl bg-red-400 w-max">حذف<p>
+            <p onclick="removeFav(${input})" class="p-4 rounded-3xl bg-red-400 w-max cursor-pointer">حذف<p>
             
         </div>
         <span class="genre">${BOOKS[foundIndex].genre}</span>
