@@ -5,7 +5,7 @@ const favRoot = document.getElementById("favBar")
 const selectedAuthors = [];
 const selectedLanguages = [];
 const selectedGenres = [];
-let count =0
+let count = JSON.parse(localStorage.getItem("countSave"))|| 0
 
 const favorites = JSON.parse(localStorage.getItem("favorites")) || [];
 favRoot.innerHTML = JSON.parse(localStorage.getItem("saveFav")) || "";
@@ -17,16 +17,16 @@ let favBarItems = []
 function render(list) {
     const template = list.map(book => {
         return `
-        <div class="rounded-md overflow-hidden border shadow-lg relative">
+        <div class="rounded-md overflow-hidden border shadow-lg relative scale-[0.9]">
         <img src="./image/${book.imgSrc}" width="300" alt="" class="w-full h-[300px] object-cover">
         <div class="p-4">
             <h2>${book.title}</h2>
             <p>اثر: ${book.author}</p>
             ${favorites.includes(book.id) ? (
 
-                `<button onclick="removeFav(${book.id})" class="bg-red-400 px-4 py-1 mt-4 text-white">حذف از علاقمندی ها</button>`
+                `<button onclick="removeFav(${book.id})" class="bg-red-400 px-4 py-2 mt-4 text-white rounded-3xl ">حذف از علاقمندی ها</button>`
             ) : (
-                `<button onclick="addFav(${book.id})" class="bg-blue-400 px-4 py-1 mt-4 text-white">اضافه به علاقمندی</button>`
+                `<button onclick="addFav(${book.id})" class="bg-blue-400 px-4 py-2 mt-4 text-white rounded-3xl  ">اضافه به علاقمندی</button>`
             )}
         </div>
         <span class="genre">${book.genre}</span>
@@ -42,6 +42,8 @@ function render(list) {
 }
 render(BOOKS)
 favCounter()
+favToggler()
+favToggler()
 
 function addFav(id) {
     favorites.push(id);
@@ -49,6 +51,7 @@ function addFav(id) {
     if(favorites.length!==0){
         let element= document.querySelector("h5")
         element.classList.add("opacity-0")
+        element.classList.remove("opacity-1")
 
     }
     // console.log(element)
@@ -265,7 +268,7 @@ function favRender1(input ){
         <div class="p-4">
             <h2>${BOOKS[foundIndex].title}</h2>
             <p>اثر: ${BOOKS[foundIndex].author}</p>
-            <p onclick="removeFav(${input})" class="p-4 rounded-3xl bg-red-400 w-max cursor-pointer">حذف<p>
+            <p onclick="removeFav(${input})" class="p-4 rounded-3xl bg-[#A7BEAE] w-max cursor-pointer">حذف<p>
             
         </div>
         <span class="genre">${BOOKS[foundIndex].genre}</span>
@@ -289,18 +292,30 @@ function favBarItemsDel(input){
 function favToggler(){
     document.getElementById("favBar").classList.toggle("scale-x-0")
     document.getElementById("favImg").classList.toggle("rotate-[360deg]")
+    root.classList.toggle("blur-sm")
     if(favorites.length===0&&count===0){
         count++
         let element= document.createElement("h5")
         element.textContent="سبد شما خالیست!"
+        element.classList.add('mt-[4.5rem]')
+        element.classList.add("sm:mt-0")
+        element.classList.add("text-center")
+        element.classList.add("bg-[#E7E8D1]")
+        element.classList.add("py-2")
+        element.classList.add("duration-200")
+        
         favRoot.appendChild(element)
         console.log(element)
-    } 
+        localStorage.setItem("countSave",JSON.stringify(count))
+    }else if(favorites.length===0){
+         document.querySelector("h5").classList.remove("opacity-0")
+    }
     
         
 }
 function favCounter(){
     document.getElementById("favCounter").textContent=favorites.length
 }
+
 
 
