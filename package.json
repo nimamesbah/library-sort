@@ -4,5 +4,8 @@
   },
   "scripts": {
     "watchTailwind": "npx tailwindcss -i ./src/input.css -o ./src/output.css --watch"
+  },
+  "dependencies": {
+    "toastify-js": "^1.12.0"
   }
 }

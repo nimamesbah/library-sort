@@ -11,6 +11,34 @@ const favorites = JSON.parse(localStorage.getItem("favorites")) || [];
 favRoot.innerHTML = JSON.parse(localStorage.getItem("saveFav")) || "";
 
 let favBarItems = []
+const toast =Toastify({
+    text: "ثبت شد! برای بازگشت کلیک کنید",
+    duration: 3000,
+    destination: "",
+    newWindow: true,
+    close: true,
+    gravity: "top", // `top` or `bottom`
+    position: "left", // `left`, `center` or `right`
+    stopOnFocus: true, // Prevents dismissing of toast on hover
+    style: {
+      background: "linear-gradient(to right, #00b09b, #96c93d)",
+    },
+    onClick: function(){
+        
+        console.log("nima")
+        
+        
+        favBarItemsDel(favorites[favorites.length-1])
+        favorites.splice(favorites.length-1,1)
+        favCounter()
+        render(BOOKS)
+        
+        
+        
+        
+        
+    } // Callback after click
+  })
 
 
 
@@ -34,7 +62,7 @@ function render(list) {
     </div>
         `
     }).join("")
-    console.log(favorites)
+    
 
 
 
@@ -45,6 +73,9 @@ favCounter()
 favToggler()
 favToggler()
 
+
+
+
 function addFav(id) {
     favorites.push(id);
     favBarItems.push(id);
@@ -54,17 +85,46 @@ function addFav(id) {
         element.classList.remove("opacity-1")
 
     }
+    
+    
+    
+    
+    toast.showToast()
+    for(let i = 0; i<favorites.length;i++){
+        if(favorites[i]===undefined){
+            favorites.splice(i,1)
+            console.log(favorites)
+            favCounter()
+
+        }
+    }
     // console.log(element)
     localStorage.setItem("favorites", JSON.stringify(favorites));
     calcFilters()
     favRender1(id)
     favCounter()
-
     
     
-    // favRender()
+    
+    
 }
+// function antiUndefined(){
+//     debugger
+    
+//     for(let i = 0; i<favorites.length;i++){
+//         if(favorites[i]===undefined){
+//             favorites.splice(i,1)
+//             console.log(favorites)
 
+//         }
+//     }
+//     favCounter()
+    
+
+// }
+    // favRender()
+    
+    
 function removeFav(id) {
     const foundIndex = favorites.findIndex(item => item == id);
     favorites.splice(foundIndex, 1)
@@ -284,6 +344,7 @@ function favRender1(input ){
 
 }
 favRender1()
+
 function favBarItemsDel(input){
     document.getElementById(`${input}`).remove()
     localStorage.setItem("saveFav",JSON.stringify(favRoot.innerHTML))
