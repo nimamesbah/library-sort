@@ -30,8 +30,10 @@ const toast =Toastify({
         
         favBarItemsDel(favorites[favorites.length-1])
         favorites.splice(favorites.length-1,1)
+        toast.hideToast()
         favCounter()
         render(BOOKS)
+
         
         
         
