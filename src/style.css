@@ -30,4 +30,16 @@
 
 body {
     margin: 0;
+    background-color: #FFD43A;
+}
+label{
+    transition: 200ms;
+    color: azure;
+}
+label:hover{
+    color: #F0BB78;     
+    cursor: pointer;
+}
+#favIcon:hover{
+    background-color: rgb(65, 65, 65);
 }

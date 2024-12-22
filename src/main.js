@@ -25,7 +25,7 @@ const toast =Toastify({
     },
     onClick: function(){
         
-        console.log("nima")
+        console.log(toast)
         
         
         favBarItemsDel(favorites[favorites.length-1])
@@ -47,7 +47,7 @@ const toast =Toastify({
 function render(list) {
     const template = list.map(book => {
         return `
-        <div class="rounded-md overflow-hidden border shadow-lg relative scale-[0.9]">
+        <div class=" text-white rounded-md overflow-hidden border border-[#FFD43A] shadow-lg relative scale-[0.9]">
         <img src="./image/${book.imgSrc}" width="300" alt="" class="w-full h-[300px] object-cover">
         <div class="p-4">
             <h2>${book.title}</h2>
