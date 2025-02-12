@@ -355,7 +355,7 @@ function favBarItemsDel(input){
 function favToggler(){
     document.getElementById("favBar").classList.toggle("scale-x-0")
     document.getElementById("favImg").classList.toggle("rotate-[360deg]")
-    root.classList.toggle("blur-sm")
+    root.classList.toggle("blur-xs")
     if(favorites.length===0&&count===0){
         count++
         let element= document.createElement("h5")
