@@ -8,12 +8,12 @@ const selectedGenres = [];
 let count = JSON.parse(localStorage.getItem("countSave"))|| 0
 
 const favorites = JSON.parse(localStorage.getItem("favorites")) || [];
-favRoot.innerHTML = JSON.parse(localStorage.getItem("saveFav")) || "";
+favRoot.innerHTML = JSON.parse(localStorage.getItem("saveFav")) || `<h5 class="mt-[4.5rem] sm:mt-0 text-center py-2 duration-200 bg-[#E7E8D1]">سبد شما خالیست!</h5>`;
 
 let favBarItems = []
 const toast =Toastify({
     text: "ثبت شد! برای بازگشت کلیک کنید",
-    duration: 3000,
+    duration: 2000,
     destination: "",
     newWindow: true,
     close: true,
@@ -33,6 +33,8 @@ const toast =Toastify({
         toast.hideToast()
         favCounter()
         render(BOOKS)
+        setTimeout(()=> toast.hideToast(),2000)
+        
 
         
         
@@ -41,7 +43,6 @@ const toast =Toastify({
         
     } // Callback after click
   })
-
 
 
 function render(list) {
@@ -54,9 +55,9 @@ function render(list) {
             <p>اثر: ${book.author}</p>
             ${favorites.includes(book.id) ? (
 
-                `<button onclick="removeFav(${book.id})" class="bg-red-400 px-4 py-2 mt-4 text-white rounded-3xl ">حذف از علاقمندی ها</button>`
+                `<button onclick="removeFav(${book.id})" class="bg-red-400 px-4 py-2 mt-4 text-white rounded-3xl cursor-pointer ">حذف از علاقمندی ها</button>`
             ) : (
-                `<button onclick="addFav(${book.id})" class="bg-blue-400 px-4 py-2 mt-4 text-white rounded-3xl  ">اضافه به علاقمندی</button>`
+                `<button onclick="addFav(${book.id})" class="bg-blue-400 px-4 py-2 mt-4 text-white rounded-3xl cursor-pointer  ">اضافه به علاقمندی</button>`
             )}
         </div>
         <span class="genre">${book.genre}</span>
@@ -79,14 +80,16 @@ favToggler()
 
 
 function addFav(id) {
-    favorites.push(id);
-    favBarItems.push(id);
-    if(favorites.length!==0){
-        let element= document.querySelector("h5")
-        element.classList.add("opacity-0")
-        element.classList.remove("opacity-1")
+    favorites.push(id)
+    
+    
 
-    }
+    // if(favorites.length!==0){
+    //     let element= document.querySelector("h5")
+    //     element.classList.add("opacity-0")
+    //     element.classList.remove("opacity-1")
+
+    // }
     
     
     
@@ -105,6 +108,7 @@ function addFav(id) {
     calcFilters()
     favRender1(id)
     favCounter()
+    document.querySelector("h5").classList.add("hidden")
     
     
     
@@ -128,6 +132,7 @@ function addFav(id) {
     
     
 function removeFav(id) {
+    
     const foundIndex = favorites.findIndex(item => item == id);
     favorites.splice(foundIndex, 1)
     localStorage.setItem("favorites", JSON.stringify(favorites));
@@ -135,17 +140,18 @@ function removeFav(id) {
     favBarItemsDel(id)
     favCounter()
     if(favorites.length===0){
-        let element= document.querySelector("h5")
-        element.classList.remove("opacity-0")
+        document.querySelector("h5").classList.remove("hidden")
+        
     }
-    // favRender()
+    
 }
 
 function renderFilters() {
     filters.innerHTML = authorsTemplate();
     filters.innerHTML += langsTemplate();
     filters.innerHTML += generTemplate();
-
+    if(favorites.length===0)
+    document.querySelector("h5").classList.remove("hidden")
 }
 renderFilters()
 
@@ -323,14 +329,17 @@ function calcFilters() {
 //     return favRoot.innerHTML+=result
 // }
 // favRender()
-function favRender1(input ){
+function favRender1(input){
     let foundIndex = BOOKS.findIndex(book => book.id === input)
-    let temp=`<div id="${input}" class="rounded-md overflow-hidden border shadow-lg relative">
+    let temp=`<div id="${input}" class="rounded-md overflow-hidden border shadow-lg min-h-[400px] relative">
         <img src="./image/${BOOKS[foundIndex].imgSrc}" width="300" alt="" class="w-full h-[300px] object-cover">
-        <div class="p-4">
-            <h2>${BOOKS[foundIndex].title}</h2>
-            <p>اثر: ${BOOKS[foundIndex].author}</p>
-            <p onclick="removeFav(${input})" class="p-4 rounded-3xl bg-[#A7BEAE] w-max cursor-pointer">حذف<p>
+        <div class="p-4 flex flex-col justify-between gap-3.5 items-center w-full flex-wrap">
+            <div class="w-full flex justify-between">
+                <h2 class="">${BOOKS[foundIndex].title}</h2>
+                <p>اثر: ${BOOKS[foundIndex].author}</p>
+            
+            </div>
+            <p onclick="removeFav(${input})" class="px-4 py-2 rounded-3xl bg-[#A7BEAE] w-max cursor-pointer">حذف<p>
             
         </div>
         <span class="genre">${BOOKS[foundIndex].genre}</span>
@@ -340,39 +349,43 @@ function favRender1(input ){
     
     let result = favRoot.innerHTML+=temp
     localStorage.setItem("saveFav",JSON.stringify(result))
+    
 
     return result
 
 
-}
-favRender1()
+    }
+// favRender1()
 
 function favBarItemsDel(input){
     document.getElementById(`${input}`).remove()
     localStorage.setItem("saveFav",JSON.stringify(favRoot.innerHTML))
+    
+    
+    
 
 }
 function favToggler(){
     document.getElementById("favBar").classList.toggle("scale-x-0")
     document.getElementById("favImg").classList.toggle("rotate-[360deg]")
     root.classList.toggle("blur-xs")
-    if(favorites.length===0&&count===0){
-        count++
-        let element= document.createElement("h5")
-        element.textContent="سبد شما خالیست!"
-        element.classList.add('mt-[4.5rem]')
-        element.classList.add("sm:mt-0")
-        element.classList.add("text-center")
-        element.classList.add("bg-[#E7E8D1]")
-        element.classList.add("py-2")
-        element.classList.add("duration-200")
+    // if(favorites.length===0&&count===0){
+    //     count++
+    //     let element= document.createElement("h5")
+    //     element.textContent="سبد شما خالیست!"
+    //     element.classList.add('mt-[4.5rem]')
+    //     element.classList.add("sm:mt-0")
+    //     element.classList.add("text-center")
+    //     element.classList.add("bg-[#E7E8D1]")
+    //     element.classList.add("py-2")
+    //     element.classList.add("duration-200")
         
-        favRoot.appendChild(element)
-        console.log(element)
-        localStorage.setItem("countSave",JSON.stringify(count))
-    }else if(favorites.length===0){
-         document.querySelector("h5").classList.remove("opacity-0")
-    }
+    //     favRoot.appendChild(element)
+    //     console.log(element)
+    //     localStorage.setItem("countSave",JSON.stringify(count))
+    // }else if(favorites.length===0){
+    //      document.querySelector("h5").classList.remove("opacity-0")
+    // }
     
         
 }
