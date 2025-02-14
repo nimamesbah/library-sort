@@ -1,6 +1,7 @@
 const root = document.getElementById("root")
 const filters = document.getElementById("filters")
 const favRoot = document.getElementById("favBar")
+const body = document.querySelector("body")
 
 const selectedAuthors = [];
 const selectedLanguages = [];
@@ -11,38 +12,7 @@ const favorites = JSON.parse(localStorage.getItem("favorites")) || [];
 favRoot.innerHTML = JSON.parse(localStorage.getItem("saveFav")) || `<h5 class="mt-[4.5rem] sm:mt-0 text-center py-2 duration-200 bg-[#E7E8D1]">سبد شما خالیست!</h5>`;
 
 let favBarItems = []
-const toast =Toastify({
-    text: "ثبت شد! برای بازگشت کلیک کنید",
-    duration: 2000,
-    destination: "",
-    newWindow: true,
-    close: true,
-    gravity: "top", // `top` or `bottom`
-    position: "left", // `left`, `center` or `right`
-    stopOnFocus: true, // Prevents dismissing of toast on hover
-    style: {
-      background: "linear-gradient(to right, #00b09b, #96c93d)",
-    },
-    onClick: function(){
-        
-        console.log(toast)
-        
-        
-        favBarItemsDel(favorites[favorites.length-1])
-        favorites.splice(favorites.length-1,1)
-        toast.hideToast()
-        favCounter()
-        render(BOOKS)
-        setTimeout(()=> toast.hideToast(),2000)
-        
 
-        
-        
-        
-        
-        
-    } // Callback after click
-  })
 
 
 function render(list) {
@@ -80,35 +50,41 @@ favToggler()
 
 
 function addFav(id) {
+    // debugger
+    
     favorites.push(id)
     
     
-
+    
     // if(favorites.length!==0){
-    //     let element= document.querySelector("h5")
-    //     element.classList.add("opacity-0")
-    //     element.classList.remove("opacity-1")
-
-    // }
-    
-    
-    
-    
-    toast.showToast()
-    for(let i = 0; i<favorites.length;i++){
-        if(favorites[i]===undefined){
-            favorites.splice(i,1)
-            console.log(favorites)
-            favCounter()
-
+        //     let element= document.querySelector("h5")
+        //     element.classList.add("opacity-0")
+        //     element.classList.remove("opacity-1")
+        
+        // }
+        
+        
+        
+        
+        
+        for(let i = 0; i<favorites.length;i++){
+            if(favorites[i]===undefined){
+                favorites.splice(i,1)
+                console.log(favorites)
+                favCounter()
+                
+            }
         }
-    }
-    // console.log(element)
-    localStorage.setItem("favorites", JSON.stringify(favorites));
-    calcFilters()
-    favRender1(id)
-    favCounter()
-    document.querySelector("h5").classList.add("hidden")
+        // console.log(element)
+        localStorage.setItem("favorites", JSON.stringify(favorites));
+        calcFilters()
+        
+        favRender1(id)
+        favCounter()
+        document.querySelector("h5").classList.add("hidden")
+        toast()
+    
+    
     
     
     
@@ -144,6 +120,26 @@ function removeFav(id) {
         
     }
     
+}
+function toast(){
+    const temp = `<div id="toast" onclick="clickToast()" class="bg-blue-400 cursor-pointer rounded-2xl hover:bg-red-400 text-blue-100 duration-200 absolute left-5 top-12 w-max py-2 px-3 -translate-x-[270px] ">
+    ثبت شد. برای بازگشت کلیک کنید 
+    
+    </div>`
+    root.innerHTML+=temp
+    setTimeout(()=> document.querySelector("#toast").classList.remove("-translate-x-[270px]"))
+    setTimeout(()=> document.querySelector("#toast").classList.add("-translate-x-[270px]"),3000)
+    
+}
+function clickToast(){
+    favBarItemsDel(favorites[favorites.length-1])
+        favorites.splice(favorites.length-1,1)
+        localStorage.setItem("favorites",JSON.stringify(favorites))
+        
+       
+        favCounter()
+        render(BOOKS)
+        
 }
 
 function renderFilters() {
@@ -349,6 +345,7 @@ function favRender1(input){
     
     let result = favRoot.innerHTML+=temp
     localStorage.setItem("saveFav",JSON.stringify(result))
+    
     
 
     return result
