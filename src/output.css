@@ -909,6 +909,16 @@
       }
     }
   }
+  .max-\[100px\]\:rounded-3xl {
+    @media (width < 100px) {
+      border-radius: var(--radius-3xl);
+    }
+  }
+  .max-sm\:mb-18 {
+    @media (width < 40rem) {
+      margin-bottom: var(--spacing-18);
+    }
+  }
   .sm\:fixed {
     @media (width >= 40rem) {
       position: fixed;
