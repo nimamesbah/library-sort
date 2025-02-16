@@ -18,7 +18,7 @@ let favBarItems = []
 function render(list) {
     const template = list.map(book => {
         return `
-        <div class=" text-white rounded-md overflow-hidden border border-[#FFD43A] shadow-lg relative scale-[0.9]">
+        <div class=" text-white rounded-md overflow-hidden border border-[#CCFFFF] shadow-lg relative scale-[0.9]">
         <img src="./image/${book.imgSrc}" width="300" alt="" class="w-full h-[300px] object-cover">
         <div class="p-4">
             <h2>${book.title}</h2>
@@ -105,6 +105,10 @@ function addFav(id) {
 
 // }
     // favRender()
+    if(favorites.length!==0){
+        document.querySelector("h5").classList.add("hidden")
+        
+    }
     
     
 function removeFav(id) {
@@ -122,13 +126,18 @@ function removeFav(id) {
     
 }
 function toast(){
-    const temp = `<div id="toast" onclick="clickToast()" class="bg-blue-400 cursor-pointer rounded-2xl hover:bg-red-400 text-blue-100 duration-200 absolute left-5 top-12 w-max py-2 px-3 -translate-x-[270px] ">
+    const temp = `<div id="toast" onclick="clickToast()" class="bg-blue-400 cursor-pointer rounded-2xl hover:bg-red-400 text-blue-100 duration-200 fixed left-5 top-12 w-max py-2 px-3 -translate-x-[270px] ">
     ثبت شد. برای بازگشت کلیک کنید 
     
     </div>`
     root.innerHTML+=temp
     setTimeout(()=> document.querySelector("#toast").classList.remove("-translate-x-[270px]"))
-    setTimeout(()=> document.querySelector("#toast").classList.add("-translate-x-[270px]"),3000)
+    setTimeout(()=> {
+    if(document.querySelector("#toast"))
+        document.querySelector("#toast").classList.add("-translate-x-[270px]")
+    
+    },3000)
+    
     
 }
 function clickToast(){
@@ -279,7 +288,7 @@ function handleChangeLanguage(evt) {
 
 function calcFilters() {
     let result = [...BOOKS]
-
+    
     if (selectedAuthors.length != 0) {
         result = result.filter(book => selectedAuthors.includes(book.author))
     }
